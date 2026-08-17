@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Let Claude Read Your Email So You Don't Have To</title>
+<meta name="description" content="A 20-minute setup, then Claude briefs you on your inbox every morning — automatically.">
+<style>
+  :root {
+    --bg: #f7f7f9;
+    --surface: #ffffff;
+    --ink: #2b2d42;
+    --ink-soft: #5c5e74;
+    --line: #e2e2ea;
+    --accent: #e86a92;
+    --accent-text: #c43a68;
+    --accent-soft: #fceef3;
+    --mint: #41e2ba;
+    --mint-soft: #e2faf4;
+    --warn-bg: #fdfad9;
+    --warn-line: #e5dd7a;
+    --code-bg: #efeff4;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #2b2d42;
+      --surface: #34364e;
+      --ink: #f7f7f9;
+      --ink-soft: #b3b5c9;
+      --line: #454763;
+      --accent: #e86a92;
+      --accent-text: #e86a92;
+      --accent-soft: #45324a;
+      --mint: #41e2ba;
+      --mint-soft: #2c4450;
+      --warn-bg: #43412c;
+      --warn-line: #6d6836;
+      --code-bg: #24263a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 24px 20px 96px; }
+  h1 {
+    font-size: clamp(30px, 6vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 48px 0 8px;
+    text-wrap: balance;
+  }
+  h2 {
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    margin: 64px 0 12px;
+    text-wrap: balance;
+  }
+  h2 .kicker {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-text);
+    margin-bottom: 6px;
+  }
+  p, li { color: var(--ink); }
+  .lede { font-size: 20px; color: var(--ink-soft); margin: 0 0 32px; text-wrap: balance; }
+  strong { font-weight: 600; }
+  a { color: var(--accent-text); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .card p:first-child { margin-top: 0; }
+  .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+
+  .warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-line);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  .warn p { margin: 0; }
+
+  ul.checklist { list-style: none; padding: 0; margin: 0; }
+  ul.checklist li { padding: 6px 0 6px 32px; position: relative; }
+  ul.checklist li::before {
+    content: "";
+    position: absolute; left: 0; top: 11px;
+    width: 18px; height: 18px;
+    border: 2px solid var(--mint);
+    border-radius: 5px;
+  }
+
+  .prompt {
+    position: relative;
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin: 16px 0;
+  }
+  .prompt pre {
+    margin: 0;
+    padding: 18px 20px;
+    overflow-x: auto;
+    font: 14.5px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    white-space: pre-wrap;
+  }
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    font: 600 12.5px/1 -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--accent-text);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+  }
+  .copy-btn:hover { border-color: var(--accent); }
+  .copy-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .step {
+    counter-increment: step;
+    position: relative;
+    padding-left: 44px;
+    margin: 20px 0;
+  }
+  .step::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 2px;
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700; font-size: 14px;
+    border-radius: 50%;
+  }
+  .steps { counter-reset: step; }
+  .step p { margin: 0; }
+
+  details {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0 24px;
+    margin: 12px 0;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 16px 0;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: "+";
+    float: right;
+    color: var(--accent);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  details[open] summary::after { content: "–"; }
+  details > :last-child { padding-bottom: 18px; }
+
+  dl { margin: 0; }
+  dt { font-weight: 600; margin-top: 18px; }
+  dd { margin: 4px 0 0; color: var(--ink-soft); }
+
+  .pitch {
+    margin: 72px 0 0;
+    padding: 28px;
+    background: var(--mint-soft);
+    border-radius: var(--radius);
+    font-size: 21px;
+    line-height: 1.5;
+    font-weight: 500;
+    text-align: center;
+    text-wrap: balance;
+  }
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Let Claude read your email so you don't have to</h1>
+  <p class="lede">A 20-minute setup, then it runs every morning by itself — even while your laptop sleeps.</p>
+
+  <div class="card">
+    <p><strong>Who this is for:</strong> anyone who spends the first hour of their day digging through email. No technical skills needed — if you can write a Slack message, you can do this.</p>
+    <p><strong>What you'll have at the end:</strong> every weekday at 7&nbsp;AM, Claude reads your new email and delivers a short briefing — what needs you today, what's waiting on others, and what you can safely ignore. Reading it takes about a minute.</p>
+  </div>
+
+  <h2><span class="kicker">Before you start</span>2-minute checklist</h2>
+  <div class="card">
+    <ul class="checklist">
+      <li><strong>Claude Desktop app</strong> installed (Mac or Windows) — <a href="https://claude.ai/download">claude.ai/download</a> — and sign in with your Claude account</li>
+      <li>Your <strong>work Gmail</strong> login handy</li>
+    </ul>
+  </div>
+  <div class="warn">
+    <p>⚠️ <strong>Use your work account only.</strong> Claude processes email content on Anthropic's servers. Don't connect a personal inbox, and check your company's policy if you're unsure.</p>
+  </div>
+
+  <h2><span class="kicker">Part 1 · 5 minutes, one time only</span>Connect your Gmail</h2>
+  <div class="steps">
+    <div class="step"><p>Open the Claude Desktop app and switch to <strong>Cowork</strong> mode.</p></div>
+    <div class="step"><p>Open <strong>Connectors</strong> (in settings) and find <strong>Gmail</strong>.</p></div>
+    <div class="step"><p>Click to authorize, sign in with your <strong>work</strong> Google account, and grant access.</p></div>
+  </div>
+  <p>That's it. Claude can now read your inbox — but only when you ask it to, and <strong>it never sends anything without your approval</strong>.</p>
+
+  <h2><span class="kicker">Part 2 · The “wow” moment</span>Your first triage</h2>
+  <p>Paste this into Cowork and watch it work:</p>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Look at my unread email from the last 24 hours and give me a briefing:
+
+1. NEEDS ME TODAY — anything I have to reply to or act on, with a
+   one-line summary each
+2. WAITING ON OTHERS — things I'm waiting for, and from whom
+3. FYI ONLY — one line each
+4. SAFE TO IGNORE — just count them
+
+Keep it short. Bullet points, no fluff.</pre>
+  </div>
+  <p>It takes a couple of minutes — Cowork works step by step, like a person would. What you get back is the map of your morning. Best demoed on a real inbox with 20+ unread emails.</p>
+
+  <h2><span class="kicker">Part 3 · The actual magic</span>Make it automatic</h2>
+  <p>Now paste this:</p>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Schedule that same email briefing to run every weekday at 7:00 AM.</pre>
+  </div>
+  <p>Claude sets up the schedule itself. Confirm the details it shows you, and you're done.</p>
+  <div class="card">
+    <p><strong>Key facts about scheduled tasks:</strong></p>
+    <ul>
+      <li>They run <strong>remotely on Anthropic's servers</strong> — your computer can be asleep or the app closed.</li>
+      <li>Each morning's briefing is waiting for you in Cowork.</li>
+      <li>To see what's scheduled, just ask: <em>“Show me my scheduled tasks.”</em></li>
+      <li>To stop one: <em>“Cancel my morning email task.”</em> Everything is conversation — no settings menus.</li>
+    </ul>
+  </div>
+
+  <h2><span class="kicker">Part 4 · Optional, for later</span>Level up when you're ready</h2>
+  <p>Don't do these on day one. Once the morning briefing has earned your trust, add one at a time.</p>
+
+  <details>
+    <summary>Teach it your inbox (run once — makes everything smarter)</summary>
+    <div class="prompt">
+      <button class="copy-btn" type="button">Copy</button>
+      <pre>Scan my Gmail from the past 30 days. Identify my most frequent senders
+and what category they fall into, the types of requests I get most
+often, and how I typically reply to each. Remember this for future
+email briefings.</pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>Pre-drafted replies, waiting for your review</summary>
+    <div class="prompt">
+      <button class="copy-btn" type="button">Copy</button>
+      <pre>Update my morning briefing task: for routine requests (scheduling,
+acknowledgments, simple questions), also draft a reply I can review.
+Never send anything — drafts only.</pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>Follow-up catcher — who owes you a reply?</summary>
+    <div class="prompt">
+      <button class="copy-btn" type="button">Copy</button>
+      <pre>Create a scheduled task for weekdays at 7:05 AM: scan my sent mail
+from the last 14 days for emails that never got a reply. List who
+owes me a response and what for, and suggest a short nudge for each.</pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>VIP alerts — never bury the boss</summary>
+    <div class="prompt">
+      <button class="copy-btn" type="button">Copy</button>
+      <pre>Update my morning briefing: emails from [boss's name], [key partner],
+or anyone @importantclient.com always appear first, under a
+"HIGH SIGNAL" heading.</pre>
+    </div>
+  </details>
+
+  <h2><span class="kicker">Good to know</span>Common questions</h2>
+  <div class="card">
+    <dl>
+      <dt>Can it send email without me?</dt>
+      <dd>No. It drafts; you approve and send.</dd>
+      <dt>What if the briefing gets something wrong?</dt>
+      <dd>Tell it — “that vendor email was actually urgent” — and it adjusts the task. It's a conversation, not a config file.</dd>
+      <dt>Does my laptop need to be on at 7 AM?</dt>
+      <dd>No. Scheduled tasks run in the cloud.</dd>
+      <dt>Is this reading ALL my email forever?</dt>
+      <dd>Only what the task describes (e.g., unread from the last 24 hours), only on the schedule you set, and you can cancel anytime.</dd>
+      <dt>I got stuck.</dt>
+      <dd>Ask Claude itself: “Walk me through connecting Gmail” — it will guide you.</dd>
+    </dl>
+  </div>
+
+  <p class="pitch">You describe the chore once, in plain English.<br>It happens every morning, forever — and you get your first hour back.</p>
+
+  <footer>
+    Sources: Anthropic's <a href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork">Cowork scheduled-tasks guide</a> ·
+    How-To Geek's <a href="https://www.howtogeek.com/automate-email-check-with-claude-cowork/">email automation walkthrough</a> ·
+    Devshree Bharatia's <a href="https://devshreebharatia.substack.com/p/how-i-automate-my-emails-and-follow">email + follow-up workflow</a>
+  </footer>
+</main>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(btn.nextElementSibling.textContent);
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+    });
+  });
+</script>
+</body>
+</html>
