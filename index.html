@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Teach Claude Your Job — A Beginner Skills Workshop</title>
-<meta name="description" content="A hands-on 45-minute workshop: learn what Claude Skills are, use one, build your own without code, and share it with your team.">
+<title>5 Skills in 50 Minutes — A Beginner Claude Skills Workshop</title>
+<meta name="description" content="A hands-on workshop: learn the create → install → test loop for Claude Skills, then build five useful skills with ready-to-paste prompts and live demos.">
 <style>
   :root {
     --bg: #f7f7f9;
@@ -70,6 +70,7 @@
     color: var(--accent-text);
     margin-bottom: 6px;
   }
+  h3 { font-size: 15px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); margin: 28px 0 8px; }
   p, li { color: var(--ink); }
   .lede { font-size: 20px; color: var(--ink-soft); margin: 0 0 32px; text-wrap: balance; }
   strong { font-weight: 600; }
@@ -83,7 +84,7 @@
     margin: 20px 0;
   }
   .card p:first-child { margin-top: 0; }
-  .card p:last-child, .card ul:last-child, .card dl:last-child { margin-bottom: 0; }
+  .card p:last-child, .card ul:last-child, .card dl:last-child, .card ol:last-child { margin-bottom: 0; }
 
   .warn {
     background: var(--warn-bg);
@@ -109,7 +110,7 @@
     background: var(--code-bg);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    margin: 16px 0;
+    margin: 12px 0 20px;
   }
   .prompt pre {
     margin: 0;
@@ -149,6 +150,18 @@
   }
   .steps { counter-reset: step; }
   .step p { margin: 0; }
+
+  .skill-header {
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .notice {
+    border-left: 3px solid var(--mint);
+    background: var(--mint-soft);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 18px;
+    margin: 16px 0;
+  }
+  .notice p { margin: 0; }
 
   details {
     background: var(--surface);
@@ -204,54 +217,188 @@
 </head>
 <body>
 <main>
-  <h1>Teach Claude your job, once</h1>
-  <p class="lede">A hands-on beginner workshop on Claude Skills — 45 minutes, no coding, leave with a skill you built yourself.</p>
+  <h1>5 skills in 50 minutes</h1>
+  <p class="lede">A hands-on Claude Skills workshop — no coding. Learn the loop once, then build five skills you'll actually use, each with a live demo.</p>
 
   <div class="card">
-    <p><strong>The problem:</strong> every time you ask Claude for help, you re-explain the same things — your format, your tone, your checklist, your team's rules. Ten minutes of setup before every answer.</p>
-    <p><strong>The fix:</strong> a <strong>Skill</strong> is that explanation, saved. It's a small instruction file Claude automatically pulls up whenever it's relevant — in any chat, forever. Explain your weekly report format once, and every future "write my weekly report" just… comes out right.</p>
+    <p><strong>What's a skill?</strong> Every time you ask Claude for help, you re-explain the same things — your format, your tone, your checklist. A <strong>Skill</strong> is that explanation, saved: a small instruction file Claude automatically pulls up whenever it's relevant, in any chat, forever. Explain it once, and it's just how Claude works from then on.</p>
   </div>
 
-  <h2><span class="kicker">Before the workshop</span>5-minute setup</h2>
+  <h2><span class="kicker">Setup</span>Before we start (5 min)</h2>
   <div class="card">
     <ul class="checklist">
-      <li>Sign in at <a href="https://claude.ai">claude.ai</a> (or the Claude desktop app) with your Claude account</li>
-      <li>Open <strong>Settings → Capabilities</strong> and make sure <strong>“Code execution and file creation”</strong> is turned on — Skills need it</li>
-      <li>Find the <strong>Skills</strong> section in Settings — that's where you'll browse, enable, and upload them</li>
+      <li>Sign in at <a href="https://claude.ai">claude.ai</a> (or the Claude desktop app)</li>
+      <li>In <strong>Settings → Capabilities</strong>, turn on <strong>“Code execution and file creation”</strong> — Skills need it</li>
+      <li>Find the <strong>Skills</strong> section in Settings — that's where uploads and on/off toggles live</li>
     </ul>
   </div>
 
-  <h2><span class="kicker">Exercise 1 · 5 minutes</span>Watch a skill work</h2>
-  <p>Claude ships with ready-made skills for creating real files — spreadsheets, slide decks, Word docs. Make sure they're enabled in Settings, then paste this into a new chat:</p>
-  <div class="prompt">
-    <button class="copy-btn" type="button">Copy</button>
-    <pre>Create a spreadsheet tracking 5 example vendor contracts:
-vendor name, renewal date, annual cost, owner, and status.
-Add a summary row and make it look clean.</pre>
+  <h2><span class="kicker">The loop</span>Every skill is built the same 3 ways</h2>
+  <div class="steps">
+    <div class="step"><p><strong>Create</strong> — paste a “build me this skill” prompt into Claude. It interviews you, writes the skill, and hands back a <strong>zip file</strong>.</p></div>
+    <div class="step"><p><strong>Install</strong> — go to <strong>Settings → Skills → Upload skill</strong> and upload the zip.</p></div>
+    <div class="step"><p><strong>Test</strong> — open a <em>fresh chat</em> and run the demo prompt. Don't mention the skill: Claude should pick it up on its own. That's the magic moment.</p></div>
   </div>
-  <p>You'll get a real, downloadable <strong>.xlsx file</strong> — properly formatted, formulas and all. Notice what you <em>didn't</em> do: explain how spreadsheets should be structured. The skill knew. That's the whole idea, and now you'll build one for your own work.</p>
+  <p>Not quite right? Go back to the chat that built it, say what to change, re-upload. That edit loop <em>is</em> skill development. Now — five times through the loop, one useful skill each.</p>
 
-  <h2><span class="kicker">Exercise 2 · 15 minutes</span>Build your own — by asking</h2>
-  <p>You don't write skills; you <strong>describe them, and Claude writes them</strong>. Paste this and answer its questions:</p>
+  <h2><span class="kicker">Skill 1 · warm-up</span>weekly-status</h2>
+  <p>Turns messy notes into your team's status update. The simplest possible skill — pure formatting — which is why it's first.</p>
+  <h3>Create it</h3>
   <div class="prompt">
     <button class="copy-btn" type="button">Copy</button>
-    <pre>Help me create a custom skill. It's called "weekly-status".
+    <pre>Help me create a custom skill called "weekly-status".
 
-When I give you my raw notes from the week, turn them into my
-team's status update format:
+When I share raw notes about my week, format them as a status
+update with these sections:
 - WINS (done this week)
 - IN FLIGHT (with expected dates)
-- BLOCKED (and who can unblock it)
+- BLOCKED (each item names who can unblock it)
 - NEXT WEEK
 
-Tone: brief and direct, no corporate filler. Interview me about
-anything else you need, then package the skill as a zip file I
-can download and upload to my Claude settings.</pre>
+Tone: brief and direct, no corporate filler. Never invent dates.
+Interview me if you need anything else, then package the skill
+as a zip I can download.</pre>
   </div>
-  <p>Swap in whatever chore you re-explain most — an email-triage briefing, meeting-notes formatting, a vendor-comparison checklist, your SOP for handling a request type. The pattern is always: <em>name it, describe when it applies, show the output you want, ask for a zip.</em></p>
+  <h3>Demo it (fresh chat, after installing)</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Status update from these notes:
+
+finished the vendor onboarding doc, legal signed off tuesday.
+still chasing finance for the Q3 budget numbers, need them
+before I can book the offsite venue. started interviews for
+the coordinator role, 2 done 3 scheduled. next week: offsite
+logistics, close out the audit checklist.</pre>
+  </div>
+  <div class="notice"><p><strong>Notice:</strong> you never mentioned the skill — the request matched its description, so Claude used it automatically. BLOCKED names finance, because the skill says it must.</p></div>
+
+  <h2><span class="kicker">Skill 2</span>meeting-notes</h2>
+  <p>Raw transcript or scribbles in → decisions, action items, and owners out. The skill encodes what your team considers “captured.”</p>
+  <h3>Create it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Help me create a custom skill called "meeting-notes".
+
+When I paste meeting notes or a transcript, produce:
+1. DECISIONS — what was decided, one line each
+2. ACTIONS — a table: action, owner, due date
+3. OPEN QUESTIONS — anything left unresolved
+
+Rules: every action MUST have an owner — if the notes don't
+name one, list it under OPEN QUESTIONS instead. Never pad;
+if a section is empty, say "none."
+Package it as a zip I can download.</pre>
+  </div>
+  <h3>Demo it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Clean up these meeting notes:
+
+talked about the office move. sam says the lease is confirmed
+for nov 1. we agreed to go with the phased move, ops floor
+first. someone needs to get quotes from 3 moving companies by
+friday. maria will own the comms plan to staff. also discussed
+parking but no conclusion. jt asked about budget, sam to check
+with finance and report back next week.</pre>
+  </div>
+  <div class="notice"><p><strong>Notice:</strong> the moving-company quotes have no owner in the notes — so they land in OPEN QUESTIONS, not silently assigned. Your rule, enforced every time.</p></div>
+
+  <h2><span class="kicker">Skill 3</span>email-triage</h2>
+  <p>Your rules for what's urgent and what a morning briefing looks like. Paste emails in (or wire up the Gmail connector later — the skill works either way).</p>
+  <h3>Create it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Help me create a custom skill called "email-triage".
+
+When I share emails or ask for an inbox briefing, sort
+everything into:
+1. NEEDS ME TODAY — with a one-line summary and a suggested
+   one-sentence reply each
+2. WAITING ON OTHERS — who owes me what
+3. FYI ONLY — one line each
+4. SAFE TO IGNORE — just count them
+
+Anything from my manager or containing "urgent", "deadline",
+or "approval needed" goes to the top of NEEDS ME TODAY.
+Interview me about my VIPs and common email types, then
+package it as a zip I can download.</pre>
+  </div>
+  <h3>Demo it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Triage these:
+
+1) From: facilities — "Reminder: fire drill Thursday 10am"
+2) From: my manager — "Need your approval on the new vendor
+   contract by EOD tomorrow"
+3) From: newsletter — "5 trends in workplace ops"
+4) From: recruiter-spam — "Exciting opportunity!!"
+5) From: finance — "Sent you the Q3 numbers you asked for,
+   let me know if anything looks off"</pre>
+  </div>
+  <div class="notice"><p><strong>Notice:</strong> the manager's approval request jumps to the top with a drafted reply; the newsletter is one FYI line; the spam is just a count. Your priorities, applied without you restating them.</p></div>
+
+  <h2><span class="kicker">Skill 4</span>vendor-compare</h2>
+  <p>The checklist you always score vendors against — so any quotes you paste get judged the same way, every time. Skills can carry <em>criteria</em>, not just formats.</p>
+  <h3>Create it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Help me create a custom skill called "vendor-compare".
+
+When I share vendor quotes or proposals, compare them in a
+table scored on: total first-year cost (including one-time
+fees), contract length and exit terms, support level, and
+implementation time. Then give a recommendation with the
+single biggest risk of each option.
+
+Rule: always surface hidden costs (setup fees, per-seat
+overages, auto-renewal clauses) in their own row.
+Package it as a zip I can download.</pre>
+  </div>
+  <h3>Demo it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Compare these two:
+
+Vendor A: $500/month, 12-month contract, auto-renews, $2,000
+one-time setup, email support, live in 2 weeks.
+
+Vendor B: $650/month, month-to-month, no setup fee, phone +
+email support, live in 6 weeks.</pre>
+  </div>
+  <div class="notice"><p><strong>Notice:</strong> the auto-renewal clause and setup fee get their own row — the trap you built the checklist to catch, caught by default.</p></div>
+
+  <h2><span class="kicker">Skill 5</span>brand-voice</h2>
+  <p>How your team writes — tone, banned phrases, sign-offs. This one changes <em>every</em> writing task, which makes it the best team skill to share.</p>
+  <h3>Create it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Help me create a custom skill called "brand-voice".
+
+Whenever I draft or rewrite emails, announcements, or docs,
+write in our voice: warm but direct, short sentences, active
+voice, contractions are fine. Never use "circle back",
+"leverage", "synergy", "per my last email", or exclamation
+marks in professional messages. Lead with the point, details
+after. Sign off with just my first name.
+
+Interview me for a couple of writing samples to learn from,
+then package it as a zip I can download.</pre>
+  </div>
+  <h3>Demo it</h3>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Rewrite this email:
+
+"Per my last email, I wanted to circle back and leverage this
+opportunity to touch base regarding the office move!!! It would
+be greatly appreciated if all stakeholders could endeavor to
+complete the relocation survey at their earliest convenience!"</pre>
+  </div>
+  <div class="notice"><p><strong>Notice:</strong> every banned phrase is gone and the ask now leads. From here on, <em>all</em> your drafting in Claude sounds like you.</p></div>
 
   <details>
-    <summary>What's actually inside the zip?</summary>
+    <summary>What's actually inside a skill zip?</summary>
     <p>One folder with a <code>SKILL.md</code> file — plain text with a tiny header. That's a complete skill:</p>
     <div class="prompt">
       <button class="copy-btn" type="button">Copy</button>
@@ -265,52 +412,33 @@ description: Formats raw weekly notes into the team's
 Turn the user's notes into this exact format:
 ## WINS · ## IN FLIGHT · ## BLOCKED · ## NEXT WEEK
 Brief and direct. Every BLOCKED item names who can
-unblock it. Ask before inventing dates.</pre>
+unblock it. Never invent dates.</pre>
     </div>
-    <p>The <strong>description is the trigger</strong> — Claude reads it to decide when the skill applies. Larger skills can include reference docs and templates in the same folder, but many great ones are just this.</p>
+    <p>The <strong>description is the trigger</strong> — Claude reads it to decide when the skill applies. Bigger skills can bundle templates and reference docs in the same folder, but plenty of great ones are just this.</p>
   </details>
-
-  <h2><span class="kicker">Exercise 3 · 10 minutes</span>Install it and test it</h2>
-  <div class="steps">
-    <div class="step"><p>Download the zip Claude made for you.</p></div>
-    <div class="step"><p>Go to <strong>Settings → Skills → Upload skill</strong> and upload the zip.</p></div>
-    <div class="step"><p>Open a <strong>fresh chat</strong>, paste some real notes from your week, and say “write my status update.”</p></div>
-  </div>
-  <p>No mention of the skill needed — Claude sees the request matches the skill's description and uses it on its own. If the output isn't quite right, go back to your skill-building chat, say what to change, and re-upload. That loop <em>is</em> skill development.</p>
 
   <h2><span class="kicker">Sharing</span>One person builds it, everyone has it</h2>
   <div class="card">
-    <p>The zip is the skill — send it to a teammate and they upload it to their own settings. On Team and Enterprise plans, admins can also publish skills to the whole workspace so everyone gets them automatically.</p>
-    <p>This is the multiplier: the person who best knows how a task <em>should</em> be done encodes it once, and the whole team's Claude gets better at it.</p>
+    <p>The zip <em>is</em> the skill — send it to a teammate and they upload it in their own Settings. On Team and Enterprise plans, admins can publish skills to the whole workspace so everyone gets them automatically.</p>
+    <p>That's the multiplier: whoever best knows how a task <em>should</em> be done encodes it once, and the whole team's Claude gets better at it.</p>
   </div>
   <div class="warn">
-    <p>⚠️ <strong>Only install skills from people you trust.</strong> Skills can include runnable code, so treat a skill zip like you'd treat a macro-enabled file: team-made and Anthropic-made are fine; random internet downloads deserve a skeptical read first.</p>
-  </div>
-
-  <h2><span class="kicker">Idea board</span>Skills worth building this week</h2>
-  <div class="card">
-    <ul>
-      <li><strong>email-triage</strong> — your rules for what's urgent, who's a VIP, and what a morning briefing should look like</li>
-      <li><strong>meeting-notes</strong> — raw transcript in, your team's decisions/actions/owners format out</li>
-      <li><strong>vendor-compare</strong> — the checklist you always score vendors against, applied to any quotes you paste in</li>
-      <li><strong>request-intake</strong> — your SOP for triaging inbound asks: what to ask for, where it goes, standard replies</li>
-      <li><strong>brand-voice</strong> — how your team writes: tone, banned phrases, sign-offs</li>
-    </ul>
+    <p>⚠️ <strong>Only install skills from people you trust.</strong> Skills can include runnable code — treat a skill zip like a macro-enabled file. Team-made and Anthropic-made: fine. Random internet downloads: read first.</p>
   </div>
 
   <h2><span class="kicker">Good to know</span>Common questions</h2>
   <div class="card">
     <dl>
       <dt>Do I need to know how to code?</dt>
-      <dd>No. You describe the skill in plain English and Claude writes the file. Coding only enters if <em>you</em> want the skill to run scripts.</dd>
+      <dd>No. You describe the skill in plain English and Claude writes the file.</dd>
       <dt>How is this different from a Project?</dt>
-      <dd>A Project is a place (one workspace, its own docs and chats). A Skill is a portable how-to that follows you into <em>every</em> chat and activates itself when relevant. They combine well.</dd>
-      <dt>How do I know when Claude used a skill?</dt>
-      <dd>Claude shows when a skill is active in its response. You can also just ask: “which skills did you use?”</dd>
-      <dt>Can I turn one off?</dt>
-      <dd>Yes — every skill has a toggle in Settings. Off means Claude never sees it.</dd>
+      <dd>A Project is a place — one workspace with its own docs and chats. A Skill is a portable how-to that follows you into every chat and activates itself when relevant. They combine well.</dd>
       <dt>My skill didn't trigger.</dt>
       <dd>Its <em>description</em> probably doesn't match how you phrased the request. Ask Claude to broaden the description and re-upload — or invoke it by name: “use my weekly-status skill.”</dd>
+      <dt>Can I turn one off?</dt>
+      <dd>Yes — every skill has a toggle in Settings. Off means Claude never sees it.</dd>
+      <dt>Which skill should I build first for real?</dt>
+      <dd>The task you've explained to Claude (or a new hire) more than twice. That repetition is the tell.</dd>
     </dl>
   </div>
 
