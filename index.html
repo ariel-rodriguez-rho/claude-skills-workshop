@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Let Claude Read Your Email So You Don't Have To</title>
-<meta name="description" content="A 20-minute setup, then Claude briefs you on your inbox every morning — automatically.">
+<title>Teach Claude Your Job — A Beginner Skills Workshop</title>
+<meta name="description" content="A hands-on 45-minute workshop: learn what Claude Skills are, use one, build your own without code, and share it with your team.">
 <style>
   :root {
     --bg: #f7f7f9;
@@ -83,7 +83,7 @@
     margin: 20px 0;
   }
   .card p:first-child { margin-top: 0; }
-  .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+  .card p:last-child, .card ul:last-child, .card dl:last-child { margin-bottom: 0; }
 
   .warn {
     background: var(--warn-bg);
@@ -143,7 +143,7 @@
     width: 28px; height: 28px;
     display: grid; place-items: center;
     background: var(--accent-soft);
-    color: var(--accent);
+    color: var(--accent-text);
     font-weight: 700; font-size: 14px;
     border-radius: 50%;
   }
@@ -167,7 +167,7 @@
   summary::after {
     content: "+";
     float: right;
-    color: var(--accent);
+    color: var(--accent-text);
     font-weight: 400;
     font-size: 20px;
     line-height: 1.2;
@@ -204,138 +204,128 @@
 </head>
 <body>
 <main>
-  <h1>Let Claude read your email so you don't have to</h1>
-  <p class="lede">A 20-minute setup, then it runs every morning by itself — even while your laptop sleeps.</p>
+  <h1>Teach Claude your job, once</h1>
+  <p class="lede">A hands-on beginner workshop on Claude Skills — 45 minutes, no coding, leave with a skill you built yourself.</p>
 
   <div class="card">
-    <p><strong>Who this is for:</strong> anyone who spends the first hour of their day digging through email. No technical skills needed — if you can write a Slack message, you can do this.</p>
-    <p><strong>What you'll have at the end:</strong> every weekday at 7&nbsp;AM, Claude reads your new email and delivers a short briefing — what needs you today, what's waiting on others, and what you can safely ignore. Reading it takes about a minute.</p>
+    <p><strong>The problem:</strong> every time you ask Claude for help, you re-explain the same things — your format, your tone, your checklist, your team's rules. Ten minutes of setup before every answer.</p>
+    <p><strong>The fix:</strong> a <strong>Skill</strong> is that explanation, saved. It's a small instruction file Claude automatically pulls up whenever it's relevant — in any chat, forever. Explain your weekly report format once, and every future "write my weekly report" just… comes out right.</p>
   </div>
 
-  <h2><span class="kicker">Before you start</span>2-minute checklist</h2>
+  <h2><span class="kicker">Before the workshop</span>5-minute setup</h2>
   <div class="card">
     <ul class="checklist">
-      <li><strong>Claude Desktop app</strong> installed (Mac or Windows) — <a href="https://claude.ai/download">claude.ai/download</a> — and sign in with your Claude account</li>
-      <li>Your <strong>work Gmail</strong> login handy</li>
+      <li>Sign in at <a href="https://claude.ai">claude.ai</a> (or the Claude desktop app) with your Claude account</li>
+      <li>Open <strong>Settings → Capabilities</strong> and make sure <strong>“Code execution and file creation”</strong> is turned on — Skills need it</li>
+      <li>Find the <strong>Skills</strong> section in Settings — that's where you'll browse, enable, and upload them</li>
     </ul>
+  </div>
+
+  <h2><span class="kicker">Exercise 1 · 5 minutes</span>Watch a skill work</h2>
+  <p>Claude ships with ready-made skills for creating real files — spreadsheets, slide decks, Word docs. Make sure they're enabled in Settings, then paste this into a new chat:</p>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Create a spreadsheet tracking 5 example vendor contracts:
+vendor name, renewal date, annual cost, owner, and status.
+Add a summary row and make it look clean.</pre>
+  </div>
+  <p>You'll get a real, downloadable <strong>.xlsx file</strong> — properly formatted, formulas and all. Notice what you <em>didn't</em> do: explain how spreadsheets should be structured. The skill knew. That's the whole idea, and now you'll build one for your own work.</p>
+
+  <h2><span class="kicker">Exercise 2 · 15 minutes</span>Build your own — by asking</h2>
+  <p>You don't write skills; you <strong>describe them, and Claude writes them</strong>. Paste this and answer its questions:</p>
+  <div class="prompt">
+    <button class="copy-btn" type="button">Copy</button>
+    <pre>Help me create a custom skill. It's called "weekly-status".
+
+When I give you my raw notes from the week, turn them into my
+team's status update format:
+- WINS (done this week)
+- IN FLIGHT (with expected dates)
+- BLOCKED (and who can unblock it)
+- NEXT WEEK
+
+Tone: brief and direct, no corporate filler. Interview me about
+anything else you need, then package the skill as a zip file I
+can download and upload to my Claude settings.</pre>
+  </div>
+  <p>Swap in whatever chore you re-explain most — an email-triage briefing, meeting-notes formatting, a vendor-comparison checklist, your SOP for handling a request type. The pattern is always: <em>name it, describe when it applies, show the output you want, ask for a zip.</em></p>
+
+  <details>
+    <summary>What's actually inside the zip?</summary>
+    <p>One folder with a <code>SKILL.md</code> file — plain text with a tiny header. That's a complete skill:</p>
+    <div class="prompt">
+      <button class="copy-btn" type="button">Copy</button>
+      <pre>---
+name: weekly-status
+description: Formats raw weekly notes into the team's
+  status update. Use whenever the user shares weekly
+  notes or asks for a status update.
+---
+
+Turn the user's notes into this exact format:
+## WINS · ## IN FLIGHT · ## BLOCKED · ## NEXT WEEK
+Brief and direct. Every BLOCKED item names who can
+unblock it. Ask before inventing dates.</pre>
+    </div>
+    <p>The <strong>description is the trigger</strong> — Claude reads it to decide when the skill applies. Larger skills can include reference docs and templates in the same folder, but many great ones are just this.</p>
+  </details>
+
+  <h2><span class="kicker">Exercise 3 · 10 minutes</span>Install it and test it</h2>
+  <div class="steps">
+    <div class="step"><p>Download the zip Claude made for you.</p></div>
+    <div class="step"><p>Go to <strong>Settings → Skills → Upload skill</strong> and upload the zip.</p></div>
+    <div class="step"><p>Open a <strong>fresh chat</strong>, paste some real notes from your week, and say “write my status update.”</p></div>
+  </div>
+  <p>No mention of the skill needed — Claude sees the request matches the skill's description and uses it on its own. If the output isn't quite right, go back to your skill-building chat, say what to change, and re-upload. That loop <em>is</em> skill development.</p>
+
+  <h2><span class="kicker">Sharing</span>One person builds it, everyone has it</h2>
+  <div class="card">
+    <p>The zip is the skill — send it to a teammate and they upload it to their own settings. On Team and Enterprise plans, admins can also publish skills to the whole workspace so everyone gets them automatically.</p>
+    <p>This is the multiplier: the person who best knows how a task <em>should</em> be done encodes it once, and the whole team's Claude gets better at it.</p>
   </div>
   <div class="warn">
-    <p>⚠️ <strong>Use your work account only.</strong> Claude processes email content on Anthropic's servers. Don't connect a personal inbox, and check your company's policy if you're unsure.</p>
+    <p>⚠️ <strong>Only install skills from people you trust.</strong> Skills can include runnable code, so treat a skill zip like you'd treat a macro-enabled file: team-made and Anthropic-made are fine; random internet downloads deserve a skeptical read first.</p>
   </div>
 
-  <h2><span class="kicker">Part 1 · 5 minutes, one time only</span>Connect your Gmail</h2>
-  <div class="steps">
-    <div class="step"><p>Open the Claude Desktop app and switch to <strong>Cowork</strong> mode.</p></div>
-    <div class="step"><p>Open <strong>Connectors</strong> (in settings) and find <strong>Gmail</strong>.</p></div>
-    <div class="step"><p>Click to authorize, sign in with your <strong>work</strong> Google account, and grant access.</p></div>
-  </div>
-  <p>That's it. Claude can now read your inbox — but only when you ask it to, and <strong>it never sends anything without your approval</strong>.</p>
-
-  <h2><span class="kicker">Part 2 · The “wow” moment</span>Your first triage</h2>
-  <p>Paste this into Cowork and watch it work:</p>
-  <div class="prompt">
-    <button class="copy-btn" type="button">Copy</button>
-    <pre>Look at my unread email from the last 24 hours and give me a briefing:
-
-1. NEEDS ME TODAY — anything I have to reply to or act on, with a
-   one-line summary each
-2. WAITING ON OTHERS — things I'm waiting for, and from whom
-3. FYI ONLY — one line each
-4. SAFE TO IGNORE — just count them
-
-Keep it short. Bullet points, no fluff.</pre>
-  </div>
-  <p>It takes a couple of minutes — Cowork works step by step, like a person would. What you get back is the map of your morning. Best demoed on a real inbox with 20+ unread emails.</p>
-
-  <h2><span class="kicker">Part 3 · The actual magic</span>Make it automatic</h2>
-  <p>Now paste this:</p>
-  <div class="prompt">
-    <button class="copy-btn" type="button">Copy</button>
-    <pre>Schedule that same email briefing to run every weekday at 7:00 AM.</pre>
-  </div>
-  <p>Claude sets up the schedule itself. Confirm the details it shows you, and you're done.</p>
+  <h2><span class="kicker">Idea board</span>Skills worth building this week</h2>
   <div class="card">
-    <p><strong>Key facts about scheduled tasks:</strong></p>
     <ul>
-      <li>They run <strong>remotely on Anthropic's servers</strong> — your computer can be asleep or the app closed.</li>
-      <li>Each morning's briefing is waiting for you in Cowork.</li>
-      <li>To see what's scheduled, just ask: <em>“Show me my scheduled tasks.”</em></li>
-      <li>To stop one: <em>“Cancel my morning email task.”</em> Everything is conversation — no settings menus.</li>
+      <li><strong>email-triage</strong> — your rules for what's urgent, who's a VIP, and what a morning briefing should look like</li>
+      <li><strong>meeting-notes</strong> — raw transcript in, your team's decisions/actions/owners format out</li>
+      <li><strong>vendor-compare</strong> — the checklist you always score vendors against, applied to any quotes you paste in</li>
+      <li><strong>request-intake</strong> — your SOP for triaging inbound asks: what to ask for, where it goes, standard replies</li>
+      <li><strong>brand-voice</strong> — how your team writes: tone, banned phrases, sign-offs</li>
     </ul>
   </div>
-
-  <h2><span class="kicker">Part 4 · Optional, for later</span>Level up when you're ready</h2>
-  <p>Don't do these on day one. Once the morning briefing has earned your trust, add one at a time.</p>
-
-  <details>
-    <summary>Teach it your inbox (run once — makes everything smarter)</summary>
-    <div class="prompt">
-      <button class="copy-btn" type="button">Copy</button>
-      <pre>Scan my Gmail from the past 30 days. Identify my most frequent senders
-and what category they fall into, the types of requests I get most
-often, and how I typically reply to each. Remember this for future
-email briefings.</pre>
-    </div>
-  </details>
-
-  <details>
-    <summary>Pre-drafted replies, waiting for your review</summary>
-    <div class="prompt">
-      <button class="copy-btn" type="button">Copy</button>
-      <pre>Update my morning briefing task: for routine requests (scheduling,
-acknowledgments, simple questions), also draft a reply I can review.
-Never send anything — drafts only.</pre>
-    </div>
-  </details>
-
-  <details>
-    <summary>Follow-up catcher — who owes you a reply?</summary>
-    <div class="prompt">
-      <button class="copy-btn" type="button">Copy</button>
-      <pre>Create a scheduled task for weekdays at 7:05 AM: scan my sent mail
-from the last 14 days for emails that never got a reply. List who
-owes me a response and what for, and suggest a short nudge for each.</pre>
-    </div>
-  </details>
-
-  <details>
-    <summary>VIP alerts — never bury the boss</summary>
-    <div class="prompt">
-      <button class="copy-btn" type="button">Copy</button>
-      <pre>Update my morning briefing: emails from [boss's name], [key partner],
-or anyone @importantclient.com always appear first, under a
-"HIGH SIGNAL" heading.</pre>
-    </div>
-  </details>
 
   <h2><span class="kicker">Good to know</span>Common questions</h2>
   <div class="card">
     <dl>
-      <dt>Can it send email without me?</dt>
-      <dd>No. It drafts; you approve and send.</dd>
-      <dt>What if the briefing gets something wrong?</dt>
-      <dd>Tell it — “that vendor email was actually urgent” — and it adjusts the task. It's a conversation, not a config file.</dd>
-      <dt>Does my laptop need to be on at 7 AM?</dt>
-      <dd>No. Scheduled tasks run in the cloud.</dd>
-      <dt>Is this reading ALL my email forever?</dt>
-      <dd>Only what the task describes (e.g., unread from the last 24 hours), only on the schedule you set, and you can cancel anytime.</dd>
-      <dt>I got stuck.</dt>
-      <dd>Ask Claude itself: “Walk me through connecting Gmail” — it will guide you.</dd>
+      <dt>Do I need to know how to code?</dt>
+      <dd>No. You describe the skill in plain English and Claude writes the file. Coding only enters if <em>you</em> want the skill to run scripts.</dd>
+      <dt>How is this different from a Project?</dt>
+      <dd>A Project is a place (one workspace, its own docs and chats). A Skill is a portable how-to that follows you into <em>every</em> chat and activates itself when relevant. They combine well.</dd>
+      <dt>How do I know when Claude used a skill?</dt>
+      <dd>Claude shows when a skill is active in its response. You can also just ask: “which skills did you use?”</dd>
+      <dt>Can I turn one off?</dt>
+      <dd>Yes — every skill has a toggle in Settings. Off means Claude never sees it.</dd>
+      <dt>My skill didn't trigger.</dt>
+      <dd>Its <em>description</em> probably doesn't match how you phrased the request. Ask Claude to broaden the description and re-upload — or invoke it by name: “use my weekly-status skill.”</dd>
     </dl>
   </div>
 
-  <p class="pitch">You describe the chore once, in plain English.<br>It happens every morning, forever — and you get your first hour back.</p>
+  <p class="pitch">Explain it to Claude once, in plain English.<br>Then it's just how Claude works — for you, and for everyone you send the zip.</p>
 
   <footer>
-    Sources: Anthropic's <a href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork">Cowork scheduled-tasks guide</a> ·
-    How-To Geek's <a href="https://www.howtogeek.com/automate-email-check-with-claude-cowork/">email automation walkthrough</a> ·
-    Devshree Bharatia's <a href="https://devshreebharatia.substack.com/p/how-i-automate-my-emails-and-follow">email + follow-up workflow</a>
+    Sources: Anthropic's <a href="https://support.claude.com/en/articles/12512180-use-skills-in-claude">Use skills in Claude</a> ·
+    <a href="https://support.claude.com/en/articles/12512198-how-to-create-custom-skills">How to create custom skills</a> ·
+    <a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview">Agent Skills overview</a>
   </footer>
 </main>
 <script>
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      await navigator.clipboard.writeText(btn.nextElementSibling.textContent);
+      await navigator.clipboard.writeText(btn.parentElement.querySelector('pre').textContent);
       btn.textContent = 'Copied ✓';
       setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
     });
